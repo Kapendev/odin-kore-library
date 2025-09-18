@@ -54,7 +54,6 @@ xx :: proc {
 }
 
 // NOTE: It's stupid and nice that print functions put a space between items by default.
-
 print   :: _fu.print
 println :: _fu.println
 echon   :: print
@@ -126,6 +125,7 @@ ivec4 :: proc {
 // NOTE: It's using `po` and `si` because of ODIN limitations.
 //   * Can't have an alias to a member
 //   * Default print functions are too verbose
+//   * Printing structures is ugly.
 //   * Printing generic structures is ugly.
 Rect :: struct {
     po: Vec2,
