@@ -74,7 +74,11 @@ Update :: proc(float) -> bool
 Call   :: proc()
 
 run :: proc (update: Update, color: Rgba = {96, 96, 96, 255}, width: int = 960, height: int = 540, title: string = "Parin") {
-    _rl.InitWindow(width, height, cast(cstring) raw_data(title))
+    _rl.InitWindow(width, height, cast(cstring) raw_data(title));
+    _rl.InitAudioDevice();
+    _rl.SetTargetFPS(60);
+    _rl.SetWindowMinSize(240, 135);
+
     for !_rl.WindowShouldClose() {
         _rl.BeginDrawing()
         _rl.ClearBackground(xx(color))
@@ -85,6 +89,7 @@ run :: proc (update: Update, color: Rgba = {96, 96, 96, 255}, width: int = 960, 
         _rl.EndDrawing()
         if result { break }
     }
+    _rl.CloseAudioDevice();
     _rl.CloseWindow()
 }
 
