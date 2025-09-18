@@ -5,9 +5,8 @@ It provides data structures and functions that work without garbage collection, 
 
 ## Documentation
 
-```sh
-odin run .
-```
+You should already know how to use code.
+Please, if you don't, then learn [C](https://dlang.org/) first.
 
 ## Frequently Asked Questions
 
