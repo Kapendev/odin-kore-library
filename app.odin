@@ -1,7 +1,19 @@
 package app
 
+import rl "vendor:raylib"
+
 main :: proc() {
-    a := ss("Hi there.")
+    run(update)
+    test()
+}
+
+update :: proc(dt: float) -> bool {
+    draw(rect(mouse(), vec2(64)), rgba(200, 200, 100))
+    return false
+}
+
+test :: proc() {
+    a := xx("Hi there.")
     echo(xx(a), a)
     echo("a:", typeof(a))
 

@@ -12,6 +12,7 @@ package app
 
 import _bs "base:builtin"
 import _fu "core:fmt"
+import _rl "vendor:raylib"
 
 size_t    :: _bs.uint
 ptrdiff_t :: _bs.int
@@ -41,16 +42,21 @@ CStr32 :: ^dchar
 typeof :: proc "contextless" (x: $T) -> typeid { return typeid_of(type_of(x)); }
 sizeof :: proc "contextless" (x: $T) -> Sz     { return size_of(x) }
 
-// To string type functions.
-ssfrom :: proc "contextless" (x: string) -> Str { return transmute(Str) x }
-ss :: proc {
-    ssfrom,
-}
-
-// To poop type functions.
-xxstring :: proc "contextless" (x: Str) -> string { return transmute(string) x }
+// The "to type" functions.
+// NOTE: Compiler can print errors that don't make sense when dealing with overload sets.
+xxString    :: proc "contextless" (x: Str)           -> string { return transmute(string) x }
+xxStr       :: proc "contextless" (x: string)        -> Str { return transmute(Str) x }
+xxColor     :: proc "contextless" (x: Rgba)          -> _rl.Color { return transmute(_rl.Color) x }
+xxRgba      :: proc "contextless" (x: _rl.Color)     -> Rgba { return transmute(Rgba) x }
+xxRectangle :: proc "contextless" (x: Rect)          -> _rl.Rectangle { return transmute(_rl.Rectangle) x }
+xxRect      :: proc "contextless" (x: _rl.Rectangle) -> Rect { return transmute(Rect) x }
 xx :: proc {
-    xxstring,
+    xxString,
+    xxStr,
+    xxColor,
+    xxRgba,
+    xxRectangle,
+    xxRect,
 }
 
 // NOTE: It's stupid and nice that print functions put a space between items by default.
@@ -62,7 +68,36 @@ write   :: print
 writeln :: println
 puts    :: println
 
-// --- Module: math.d
+// --- Module: game.d
+
+Update :: proc(float) -> bool
+Call   :: proc()
+
+run :: proc (update: Update, color: Rgba = {96, 96, 96, 255}, width: int = 960, height: int = 540, title: string = "Parin") {
+    _rl.InitWindow(width, height, cast(cstring) raw_data(title))
+    for !_rl.WindowShouldClose() {
+        _rl.BeginDrawing()
+        _rl.ClearBackground(xx(color))
+
+        dt := _rl.GetFrameTime();
+        result := update(dt)
+
+        _rl.EndDrawing()
+        if result { break }
+    }
+    _rl.CloseWindow()
+}
+
+mouse :: proc "contextless" () -> Vec2 {
+    return _rl.GetTouchPosition(0)
+}
+
+drawRect :: proc "contextless" (r: Rect, color: Rgba) {
+    _rl.DrawRectanglePro(xx(r), 0, 0, xx(color))
+}
+draw :: proc {
+    drawRect
+}
 
 Vec2 :: [2]float
 
@@ -120,6 +155,15 @@ ivec4From :: proc "contextless" (x: int)          -> IVec4 { return {x, x, x, x}
 ivec4 :: proc {
     ivec4Base,
     ivec4From,
+}
+
+Rgba :: [4]ubyte
+
+rgbaBase :: proc "contextless" (r, g, b: ubyte, a: ubyte = 255) -> Rgba { return {r, g, b, a} }
+rgbaFrom :: proc "contextless" (r: ubyte)                       -> Rgba { return {r, r, r, r} }
+rgba :: proc {
+    rgbaBase,
+    rgbaFrom,
 }
 
 // NOTE: It's using `po` and `si` because of ODIN limitations.
