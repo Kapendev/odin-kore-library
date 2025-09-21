@@ -8,6 +8,11 @@
 /// Single file header library for the C programming language.
 /// Make sure to change the header name before using~
 
+// NOTE: The most portable project structure is to put the library in a folder.
+//   So `project/kore/kore.odin` instead of `project/kore.odin`.
+//   If you make libraries that are 1 file, then you could tell people to rename the pacakge name.
+//   You could also have a folder and provide an "import" file.
+//   The import file can be auto-generated with attributes I think.
 package app
 
 import _bs "base:builtin"
@@ -18,7 +23,7 @@ size_t    :: _bs.uint
 ptrdiff_t :: _bs.int
 byte      :: i8
 short     :: i16
-int       :: i32
+int       :: i32 // NOTE: You can change some default types. `base:builtin` is needed if you do that.
 long      :: i64
 ubyte     :: u8
 ushort    :: u16
@@ -39,11 +44,19 @@ CStr   :: ^char
 CStr16 :: ^wchar
 CStr32 :: ^dchar
 
+// NOTE: Can't have an alias for `nil` because untyped types don't exist. So can't do stuff like: `int :: i32`
+//   I kinda like the idea of untyped types, but they also seem not well designed.
+//   Replacing them with "real" types will probably solve this issue.
 typeof :: proc "contextless" (x: $T) -> typeid { return typeid_of(type_of(x)); }
 sizeof :: proc "contextless" (x: $T) -> Sz     { return size_of(x) }
 
-// The "to type" functions.
+// NOTE: Custom attributes don't exist?
+//   I think it's only for reading files manually with `core.odin`.
+//   So GB gets to have built-in stuff and users do not? The fuk?
+//   Maybe the docs are just stupid. I have not done any runtime stuff.
+
 // NOTE: Compiler can print errors that don't make sense when dealing with overload sets.
+//   Not that special to ODIN, but ODIN goes crazy even with 2-3 functions.
 xxString    :: proc "contextless" (x: Str)           -> string { return transmute(string) x }
 xxStr       :: proc "contextless" (x: string)        -> Str { return transmute(Str) x }
 xxColor     :: proc "contextless" (x: Rgba)          -> _rl.Color { return transmute(_rl.Color) x }
@@ -73,6 +86,9 @@ puts    :: println
 Update :: proc(float) -> bool
 Call   :: proc()
 
+// NOTE: Functons are kinda split into 2 types: default and contextless.
+//   Makes sense and not a bad thing.
+//   Would be nice to have "apply X to Y functions" instead of copy-pasting "contextless" on every function.
 run :: proc (update: Update, color: Rgba = {96, 96, 96, 255}, width: int = 960, height: int = 540, title: string = "Parin") {
     _rl.InitWindow(width, height, cast(cstring) raw_data(title));
     _rl.InitAudioDevice();
@@ -171,11 +187,10 @@ rgba :: proc {
     rgbaFrom,
 }
 
-// NOTE: It's using `po` and `si` because of ODIN limitations.
+// NOTE: It's using `po` and `si` because of ODIN.
 //   * Can't have an alias to a member
 //   * Default print functions are too verbose
-//   * Printing structures is ugly.
-//   * Printing generic structures is ugly.
+//   * Printing structures is meh. Cleanest way is to make a `typeToStr` function.
 Rect :: struct {
     po: Vec2,
     si: Vec2,
