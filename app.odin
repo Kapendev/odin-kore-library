@@ -1,16 +1,18 @@
 package app
 
-
+// You.
 main :: proc() {
     run(update)
     test()
 }
 
+// Are.
 update :: proc(dt: float) -> bool {
     draw(rect(mouse(), 64, mouse().y / 2), rgba(200, 200, 100))
     return false
 }
 
+// Cute.
 test :: proc() {
     a := xx("Hi there.")
     echo(xx(a), a)
