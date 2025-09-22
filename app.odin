@@ -1,7 +1,5 @@
 package app
 
-import rl "vendor:raylib"
-
 main :: proc() {
     run(update)
     test()
