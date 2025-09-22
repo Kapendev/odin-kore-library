@@ -1,12 +1,13 @@
 package app
 
+
 main :: proc() {
     run(update)
     test()
 }
 
 update :: proc(dt: float) -> bool {
-    draw(rect(mouse(), vec2(64)), rgba(200, 200, 100))
+    draw(rect(mouse(), 64, mouse().y / 2), rgba(200, 200, 100))
     return false
 }
 

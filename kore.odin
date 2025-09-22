@@ -56,7 +56,7 @@ sizeof :: proc "contextless" (x: $T) -> Sz     { return size_of(x) }
 //   Maybe the docs are just stupid. I have not done any runtime stuff.
 
 // NOTE: Compiler can print errors that don't make sense when dealing with overload sets.
-//   Not that special to ODIN, but ODIN goes crazy even with 2-3 functions.
+//   Not that special to ODIN.
 xxString    :: proc "contextless" (x: Str)           -> string { return transmute(string) x }
 xxStr       :: proc "contextless" (x: string)        -> Str { return transmute(Str) x }
 xxColor     :: proc "contextless" (x: Rgba)          -> _rl.Color { return transmute(_rl.Color) x }
@@ -189,7 +189,7 @@ rgba :: proc {
 
 // NOTE: It's using `po` and `si` because of ODIN.
 //   * Can't have an alias to a member
-//   * Default print functions are too verbose
+//   * Default print functions are verbose
 //   * Printing structures is meh. Cleanest way is to make a `typeToStr` function.
 Rect :: struct {
     po: Vec2,
