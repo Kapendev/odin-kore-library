@@ -2,6 +2,7 @@
 
 The standard library of the [ODIN programming language](https://dlang.org/).
 It provides data structures and functions that work without garbage collection, offering precise memory control.
+This is among the largest ODIN codebases to date.
 
 ## Documentation
 
